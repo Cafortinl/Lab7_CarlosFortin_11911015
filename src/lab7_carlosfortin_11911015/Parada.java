@@ -9,17 +9,19 @@ import java.io.Serializable;
 public class Parada implements Serializable{
     private String nombre;
     private int distancia;
-    private int angulo;
+    private double angulo;
     private double cx;
     private double cy;
 
     public Parada() {
     }
 
-    public Parada(String nombre, int distancia, int angulo) {
+    public Parada(String nombre, int distancia, double angulo) {
         this.nombre = nombre;
         this.distancia = distancia;
         this.angulo = angulo;
+        cx=this.distancia*Math.cos(this.angulo);
+        cy=this.distancia*Math.sin(this.angulo);
     }
 
     public String getNombre() {
@@ -38,7 +40,7 @@ public class Parada implements Serializable{
         this.distancia = distancia;
     }
 
-    public int getAngulo() {
+    public double getAngulo() {
         return angulo;
     }
 
@@ -64,7 +66,7 @@ public class Parada implements Serializable{
 
     @Override
     public String toString() {
-        return "Parada{" + "nombre=" + nombre + '}';
+        return nombre;
     }
     
     

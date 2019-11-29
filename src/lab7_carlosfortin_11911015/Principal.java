@@ -5,6 +5,13 @@
  */
 package lab7_carlosfortin_11911015;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Carlos Fortin
@@ -17,6 +24,11 @@ public class Principal extends javax.swing.JFrame {
     public Principal() {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
+        ab.leerArchivo();
+        actualizarTablaBuses();
+        ae.leerArchivo();
+        actualizarTablaEstudiantes();
+        ap.leerArchivo();
     }
 
     /**
@@ -55,7 +67,7 @@ public class Principal extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         sp_distancia = new javax.swing.JSpinner();
         jLabel14 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        tf_angulo = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jd_simulacion = new javax.swing.JDialog();
@@ -88,6 +100,11 @@ public class Principal extends javax.swing.JFrame {
         sp_velocidad.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
 
         jButton1.setText("Agregar Bus");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jd_agregarBusLayout = new javax.swing.GroupLayout(jd_agregarBus.getContentPane());
         jd_agregarBus.getContentPane().setLayout(jd_agregarBusLayout);
@@ -155,6 +172,11 @@ public class Principal extends javax.swing.JFrame {
         jLabel10.setText("Parada");
 
         jb_agrEstud.setText("Agregar Estudiante");
+        jb_agrEstud.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_agrEstudMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jd_agregarEstLayout = new javax.swing.GroupLayout(jd_agregarEst.getContentPane());
         jd_agregarEst.getContentPane().setLayout(jd_agregarEstLayout);
@@ -217,11 +239,18 @@ public class Principal extends javax.swing.JFrame {
 
         jLabel13.setText("Distancia");
 
+        sp_distancia.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+
         jLabel14.setText("Angulo");
 
         jLabel15.setText("x π");
 
         jButton2.setText("Agregar Parada");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jd_agregarParadaLayout = new javax.swing.GroupLayout(jd_agregarParada.getContentPane());
         jd_agregarParada.getContentPane().setLayout(jd_agregarParadaLayout);
@@ -243,7 +272,7 @@ public class Principal extends javax.swing.JFrame {
                             .addComponent(tf_nomPar)
                             .addComponent(sp_distancia, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
                             .addGroup(jd_agregarParadaLayout.createSequentialGroup()
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(tf_angulo, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel15)))))
                 .addContainerGap(192, Short.MAX_VALUE))
@@ -268,7 +297,7 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(31, 31, 31)
                 .addGroup(jd_agregarParadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tf_angulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15))
                 .addGap(68, 68, 68)
                 .addComponent(jButton2)
@@ -329,39 +358,83 @@ public class Principal extends javax.swing.JFrame {
 
         Tabla_buses.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Numero", "Placa", "Velocidad"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(Tabla_buses);
 
         Tabla_estudiantes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Nombre", "No. cuenta", "Parada"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(Tabla_estudiantes);
 
         jb_subirEstudiante.setText("Subir estudiante");
+        jb_subirEstudiante.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_subirEstudianteMouseClicked(evt);
+            }
+        });
 
         jb_simular.setText("Empezar Simulacion");
 
         jb_agregarBus.setText("Agregar Bus");
+        jb_agregarBus.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_agregarBusMouseClicked(evt);
+            }
+        });
 
         jb_agregarEst.setText("Agregar Estudiante");
+        jb_agregarEst.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_agregarEstMouseClicked(evt);
+            }
+        });
 
         jButton3.setText("Agregar Parada");
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -413,6 +486,223 @@ public class Principal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jb_agregarBusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_agregarBusMouseClicked
+        jd_agregarBus.setVisible(true);
+        //jd_agregarBus.setModal(true);
+        jd_agregarBus.pack();
+        jd_agregarBus.setLocationRelativeTo(this);
+    }//GEN-LAST:event_jb_agregarBusMouseClicked
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        String placa=tf_placa.getText();
+        int num=Integer.parseInt(sp_numbus.getValue().toString());
+        int vel=Integer.parseInt(sp_velocidad.getValue().toString());
+        //administrarBuses ab=new administrarBuses("./buses.cafl");
+        boolean x=true;
+        for (Autobus b : ab.getBuses()) {
+            if(b.getNumero()==num || b.getPlaca().equals(placa)){
+                x=false;
+                JOptionPane.showMessageDialog(jd_agregarBus, "No pueden haber 2 buses con la misma placa o numero");
+                break;
+            }
+        }
+            if(x){
+                try {
+                    ab.getBuses().add(new Autobus(num, placa, vel));
+                    ab.escribirArchivo();
+                    actualizarTablaBuses();
+                } catch (IOException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            tf_placa.setText("");
+            sp_numbus.setValue(0);
+            sp_velocidad.setValue(0);
+    }//GEN-LAST:event_jButton1MouseClicked
+
+    private void jb_agrEstudMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_agrEstudMouseClicked
+        String nombre=tf_nomEst.getText();
+        int edad=Integer.parseInt(sp_edad.getValue().toString());
+        int cuenta=Integer.parseInt(ff_noCuenta.getText());
+        DefaultComboBoxModel mod=(DefaultComboBoxModel)cb_paradas.getModel();
+        int pos=cb_paradas.getSelectedIndex();
+        Parada parada=(Parada)mod.getElementAt(pos);
+        boolean x=true;
+        for (Estudiante e : ae.getEstudiantes()) {
+            if(e.getNo_cuenta()==cuenta){
+                x=false;
+                JOptionPane.showMessageDialog(jd_agregarEst, "No pueden haber 2 estudiantes con el mismo numero de cuenta");
+                break;
+            }
+        }
+        if(x){
+            try {
+                ae.getEstudiantes().add(new Estudiante(nombre, edad, cuenta, parada));
+                ae.escribirArchivo();
+                actualizarTablaEstudiantes();
+            } catch (IOException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        tf_nomEst.setText("");
+        sp_edad.setValue(0);
+        ff_noCuenta.setText("");
+        cb_paradas.setSelectedIndex(-1);
+    }//GEN-LAST:event_jb_agrEstudMouseClicked
+
+    private void jb_agregarEstMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_agregarEstMouseClicked
+        jd_agregarEst.setVisible(true);
+        //jd_agregarEst.setModal(true);
+        jd_agregarEst.pack();
+        jd_agregarEst.setLocationRelativeTo(this);
+        actualizarComboBoxParadas();
+    }//GEN-LAST:event_jb_agregarEstMouseClicked
+
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+        jd_agregarParada.setVisible(true);
+        jd_agregarParada.pack();
+        jd_agregarParada.setLocationRelativeTo(this);
+    }//GEN-LAST:event_jButton3MouseClicked
+
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        String nombre=tf_nomPar.getText();
+        int distancia=Integer.parseInt(sp_distancia.getValue().toString());
+        String[] tokens=tf_angulo.getText().split("/");
+        int num=Integer.parseInt(tokens[0]);
+        int den=Integer.parseInt(tokens[1]);
+        double angulo=((num*Math.PI)/den)*(180/Math.PI);
+        System.out.println(angulo);
+        boolean x=true;
+        for (Parada p : ap.getParadas()) {
+            if(p.getNombre().equals(nombre)){
+                x=false;
+                JOptionPane.showMessageDialog(jd_agregarParada, "No pueden haber 2 paradas con el mismo nombre");
+            }
+        }
+        if(x){
+            try {
+                ap.getParadas().add(new Parada(nombre, distancia, angulo));
+                ap.escribirArchivo();
+                actualizarComboBoxParadas();
+            } catch (IOException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        tf_nomPar.setText("");
+        sp_distancia.setValue(0);
+        tf_angulo.setText("");
+    }//GEN-LAST:event_jButton2MouseClicked
+
+    private void jb_subirEstudianteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_subirEstudianteMouseClicked
+        if(Tabla_buses.getSelectedRow()>=0){
+            if(Tabla_estudiantes.getSelectedRow()>=0){
+                Estudiante t=null;
+                Autobus temp=null;
+                String est=Tabla_estudiantes.getValueAt(Tabla_estudiantes.getSelectedRow(), 0).toString();
+                String bus=Tabla_buses.getValueAt(Tabla_buses.getSelectedRow(), 1).toString();
+                for (Estudiante e : ae.getEstudiantes()) {
+                    if(e.getNombre().equals(est)){
+                        t=e;
+                        break;
+                    }
+                }
+                for (Autobus buse : ab.getBuses()) {
+                    if(buse.getPlaca().equals(bus)){
+                        temp=buse;
+                        break;
+                    }
+                }
+                temp.getEstudiantes().add(t);
+                System.out.println(temp.getEstudiantes());
+            }else{
+                JOptionPane.showMessageDialog(this, "Debe tener un alumno seleccionado para poder subirlo a un bus");
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "Debe tener un bus seleccionado para poder subir a un alumno");
+        }
+ 
+    }//GEN-LAST:event_jb_subirEstudianteMouseClicked
+    
+    
+    public void actualizarTablaBuses(){
+        Tabla_buses.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Numero", "Placa", "Velocidad"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        //administrarBuses ab=new administrarBuses("./buses.cafl");
+        DefaultTableModel m=(DefaultTableModel)Tabla_buses.getModel();
+        if(ab.getBuses().isEmpty()){
+            
+        }else{
+            for (Autobus b : ab.getBuses()) {
+                Object[] info={b.getNumero(),b.getPlaca(),Integer.toString(b.getVelocidad())+"km/h"};
+                m.addRow(info);
+            }
+            Tabla_buses.setModel(m);
+        }
+    }
+    
+    public void actualizarTablaEstudiantes(){
+        Tabla_estudiantes.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nombre", "No. cuenta", "Parada"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        //administrarEstudiantes ae=new administrarEstudiantes("./estudiantes.cafl");
+        DefaultTableModel m=(DefaultTableModel)Tabla_estudiantes.getModel();
+        if(ae.getEstudiantes().isEmpty()){
+            
+        }else{
+            for (Estudiante e : ae.getEstudiantes()) {
+                Object[] info={e.getNombre(),e.getNo_cuenta(),e.getParada().getNombre()};
+                m.addRow(info);
+            }
+            Tabla_estudiantes.setModel(m);
+        }
+    }
+    
+    public void actualizarComboBoxParadas(){
+        DefaultComboBoxModel m=new DefaultComboBoxModel(ap.getParadas().toArray());
+        cb_paradas.setModel(m);
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -476,7 +766,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JButton jb_agrEstud;
     private javax.swing.JButton jb_agregarBus;
     private javax.swing.JButton jb_agregarEst;
@@ -491,8 +780,12 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JSpinner sp_edad;
     private javax.swing.JSpinner sp_numbus;
     private javax.swing.JSpinner sp_velocidad;
+    private javax.swing.JTextField tf_angulo;
     private javax.swing.JTextField tf_nomEst;
     private javax.swing.JTextField tf_nomPar;
     private javax.swing.JTextField tf_placa;
     // End of variables declaration//GEN-END:variables
+    administrarBuses ab=new administrarBuses("./buses.cafl");
+    administrarEstudiantes ae=new administrarEstudiantes("./estudiantes.cafl");
+    administrarParadas ap=new administrarParadas("./paradas.cafl");
 }

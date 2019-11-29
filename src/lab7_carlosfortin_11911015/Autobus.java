@@ -1,5 +1,6 @@
 package lab7_carlosfortin_11911015;
 
+import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -11,15 +12,17 @@ public class Autobus implements Serializable{
     private int numero;
     private String placa;
     private int velocidad;
+    private Color color;
     private ArrayList<Estudiante> estudiantes=new ArrayList();
 
     public Autobus() {
     }
 
-    public Autobus(int numero, String placa, int velocidad) {
+    public Autobus(int numero, String placa, int velocidad, Color color) {
         this.numero = numero;
         this.placa = placa;
         this.velocidad = velocidad;
+        this.color=color;
         estudiantes=new ArrayList();
     }
 

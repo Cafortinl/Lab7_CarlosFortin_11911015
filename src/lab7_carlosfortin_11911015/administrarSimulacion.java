@@ -59,17 +59,39 @@ public class administrarSimulacion extends Thread{
     @Override
     public void run(){
         while(vive){
-            int d=100000;
-            Parada cercana=null;
-            for (Estudiante p : bus.getEstudiantes()) {
-                Parada temp=p.getParada();
-                if(calcularDistancia(temp)<d){
-                    d=calcularDistancia(temp);
-                    cercana=temp;
+            if(bus.getEstudiantes().isEmpty()){
+                Parada unitec=new Parada();
+                unitec.setCx(0);
+                unitec.setCy(0);
+                distancia.setMaximum(calcularDistancia(unitec));
+                distancia.setString("Tiempo restante: "+calcularDistancia(unitec)/bus.getVelocidad()+" horas");
+                distancia.setValue(distancia.getValue()+(distancia.getValue()*calcularDistancia(unitec)/bus.getVelocidad()));
+            }else{
+                int d=100000;
+                Parada cercana=null;
+                Estudiante t=null;
+                for (Estudiante p : bus.getEstudiantes()) {
+                    Parada temp=p.getParada();
+                    if(calcularDistancia(temp)<d){
+                        d=calcularDistancia(temp);
+                        cercana=temp;
+                        t=p;
+                    }
                 }
+                bus.getEstudiantes().remove(t);
+                System.out.println(cercana);
+                cxact=cercana.getCx();
+                cyact=cercana.getCy();
+                System.out.println(cercana.getCx()+" "+cercana.getCy()+" "+cxact+" "+cyact);
+                System.out.println(calcularDistancia(cercana));
+                distancia.setMaximum(d);
+                distancia.setString("Tiempo restante: "+d/bus.getVelocidad()+" horas");
+                distancia.setValue(distancia.getValue()+(distancia.getValue()*d/bus.getVelocidad()));
             }
-            distancia.setMaximum(d);
-            distancia.setString("Tiempo restante: "+d/bus.getVelocidad()+" horas");
+            try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException ex) {
+                }
         }
     }
     
@@ -78,6 +100,7 @@ public class administrarSimulacion extends Thread{
         double px=p.getCx();
         double py=p.getCy();
         distancia=(int) Math.round(Math.sqrt((Math.pow((px-cxact), 2))+(Math.pow((py-cyact), 2))));
+       // System.out.println(distancia);
         return distancia;
     }
     

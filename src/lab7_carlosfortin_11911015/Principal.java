@@ -5,11 +5,13 @@
  */
 package lab7_carlosfortin_11911015;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -50,6 +52,8 @@ public class Principal extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         sp_velocidad = new javax.swing.JSpinner();
         jButton1 = new javax.swing.JButton();
+        jLabel17 = new javax.swing.JLabel();
+        jb_color = new javax.swing.JButton();
         jd_agregarEst = new javax.swing.JDialog();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -108,6 +112,14 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        jLabel17.setText("Color");
+
+        jb_color.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_colorMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jd_agregarBusLayout = new javax.swing.GroupLayout(jd_agregarBus.getContentPane());
         jd_agregarBus.getContentPane().setLayout(jd_agregarBusLayout);
         jd_agregarBusLayout.setHorizontalGroup(
@@ -122,14 +134,15 @@ public class Principal extends javax.swing.JFrame {
                         .addGroup(jd_agregarBusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel4)
                             .addComponent(jLabel3)
-                            .addComponent(jLabel5))
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel17))
                         .addGap(18, 18, 18)
-                        .addGroup(jd_agregarBusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jd_agregarBusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton1)
-                            .addGroup(jd_agregarBusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(sp_numbus)
-                                .addComponent(tf_placa)
-                                .addComponent(sp_velocidad, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(sp_numbus, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                            .addComponent(tf_placa)
+                            .addComponent(sp_velocidad)
+                            .addComponent(jb_color, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(264, Short.MAX_VALUE))
         );
         jd_agregarBusLayout.setVerticalGroup(
@@ -149,9 +162,13 @@ public class Principal extends javax.swing.JFrame {
                 .addGroup(jd_agregarBusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(sp_velocidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(49, 49, 49)
+                .addGap(28, 28, 28)
+                .addGroup(jd_agregarBusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel17)
+                    .addComponent(jb_color, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addGap(94, 94, 94))
         );
 
         jLabel6.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
@@ -514,6 +531,7 @@ public class Principal extends javax.swing.JFrame {
         String placa=tf_placa.getText();
         int num=Integer.parseInt(sp_numbus.getValue().toString());
         int vel=Integer.parseInt(sp_velocidad.getValue().toString());
+        Color color=jb_color.getBackground();
         //administrarBuses ab=new administrarBuses("./buses.cafl");
         boolean x=true;
         for (Autobus b : ab.getBuses()) {
@@ -525,7 +543,7 @@ public class Principal extends javax.swing.JFrame {
         }
             if(x){
                 try {
-                    ab.getBuses().add(new Autobus(num, placa, vel));
+                    ab.getBuses().add(new Autobus(num, placa, vel,color));
                     ab.escribirArchivo();
                     actualizarTablaBuses();
                 } catch (IOException ex) {
@@ -535,6 +553,7 @@ public class Principal extends javax.swing.JFrame {
             tf_placa.setText("");
             sp_numbus.setValue(0);
             sp_velocidad.setValue(0);
+            jb_color.setBackground(null);
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jb_agrEstudMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_agrEstudMouseClicked
@@ -657,6 +676,7 @@ public class Principal extends javax.swing.JFrame {
                 jd_simulacion.pack();
                 jd_simulacion.setLocationRelativeTo(this);
                 as=new administrarSimulacion(pb_tiempo, sim, Tabla_simulacion);
+                as.start();
             }
         }
     }//GEN-LAST:event_jb_simularMouseClicked
@@ -674,6 +694,10 @@ public class Principal extends javax.swing.JFrame {
             temp.setEstudiantes(new ArrayList());
         }
     }//GEN-LAST:event_jb_vaciarMouseClicked
+
+    private void jb_colorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_colorMouseClicked
+        jb_color.setBackground(JColorChooser.showDialog(jd_agregarBus, "Elija un color", Color.yellow));
+    }//GEN-LAST:event_jb_colorMouseClicked
     
     
     public void actualizarTablaBuses(){
@@ -807,6 +831,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -821,6 +846,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton jb_agrEstud;
     private javax.swing.JButton jb_agregarBus;
     private javax.swing.JButton jb_agregarEst;
+    private javax.swing.JButton jb_color;
     private javax.swing.JButton jb_simular;
     private javax.swing.JButton jb_subirEstudiante;
     private javax.swing.JButton jb_vaciar;

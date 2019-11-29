@@ -6,6 +6,7 @@
 package lab7_carlosfortin_11911015;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
@@ -85,6 +86,7 @@ public class Principal extends javax.swing.JFrame {
         jb_agregarBus = new javax.swing.JButton();
         jb_agregarEst = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jb_vaciar = new javax.swing.JButton();
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel2.setText("Agregar Bus");
@@ -414,6 +416,11 @@ public class Principal extends javax.swing.JFrame {
         });
 
         jb_simular.setText("Empezar Simulacion");
+        jb_simular.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_simularMouseClicked(evt);
+            }
+        });
 
         jb_agregarBus.setText("Agregar Bus");
         jb_agregarBus.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -433,6 +440,13 @@ public class Principal extends javax.swing.JFrame {
         jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton3MouseClicked(evt);
+            }
+        });
+
+        jb_vaciar.setText("Vaciar Bus");
+        jb_vaciar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_vaciarMouseClicked(evt);
             }
         });
 
@@ -456,6 +470,8 @@ public class Principal extends javax.swing.JFrame {
                                 .addComponent(jb_subirEstudiante)
                                 .addGap(40, 40, 40)
                                 .addComponent(jb_simular)
+                                .addGap(50, 50, 50)
+                                .addComponent(jb_vaciar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jb_agregarBus)
                                 .addGap(52, 52, 52)
@@ -479,7 +495,8 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(jb_simular)
                     .addComponent(jb_agregarBus)
                     .addComponent(jb_agregarEst)
-                    .addComponent(jButton3))
+                    .addComponent(jButton3)
+                    .addComponent(jb_vaciar))
                 .addContainerGap(64, Short.MAX_VALUE))
         );
 
@@ -622,6 +639,41 @@ public class Principal extends javax.swing.JFrame {
         }
  
     }//GEN-LAST:event_jb_subirEstudianteMouseClicked
+
+    private void jb_simularMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_simularMouseClicked
+        if(Tabla_buses.getSelectedRow()>=0){
+            Autobus sim=null;
+            String t=Tabla_buses.getValueAt(Tabla_buses.getSelectedRow(), 1).toString();
+            for (Autobus buse : ab.getBuses()) {
+                if(buse.getPlaca().equals(t)){
+                    sim=buse;
+                    break;
+                }
+            }
+            if(sim.getEstudiantes().isEmpty())
+                JOptionPane.showMessageDialog(this, "No se puede simular con un bus vacio");
+            else{
+                jd_simulacion.setVisible(true);
+                jd_simulacion.pack();
+                jd_simulacion.setLocationRelativeTo(this);
+                as=new administrarSimulacion(pb_tiempo, sim, Tabla_simulacion);
+            }
+        }
+    }//GEN-LAST:event_jb_simularMouseClicked
+
+    private void jb_vaciarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_vaciarMouseClicked
+        if(Tabla_buses.getSelectedRow()>=0){
+            Autobus temp=null;
+            String bus=Tabla_buses.getValueAt(Tabla_buses.getSelectedRow(), 1).toString();
+            for (Autobus buse : ab.getBuses()) {
+                    if(buse.getPlaca().equals(bus)){
+                        temp=buse;
+                        break;
+                    }
+            }
+            temp.setEstudiantes(new ArrayList());
+        }
+    }//GEN-LAST:event_jb_vaciarMouseClicked
     
     
     public void actualizarTablaBuses(){
@@ -771,6 +823,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton jb_agregarEst;
     private javax.swing.JButton jb_simular;
     private javax.swing.JButton jb_subirEstudiante;
+    private javax.swing.JButton jb_vaciar;
     private javax.swing.JDialog jd_agregarBus;
     private javax.swing.JDialog jd_agregarEst;
     private javax.swing.JDialog jd_agregarParada;
@@ -788,4 +841,5 @@ public class Principal extends javax.swing.JFrame {
     administrarBuses ab=new administrarBuses("./buses.cafl");
     administrarEstudiantes ae=new administrarEstudiantes("./estudiantes.cafl");
     administrarParadas ap=new administrarParadas("./paradas.cafl");
+    administrarSimulacion as;
 }

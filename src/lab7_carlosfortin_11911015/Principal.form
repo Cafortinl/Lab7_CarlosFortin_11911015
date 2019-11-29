@@ -495,6 +495,8 @@
                               <Component id="jb_subirEstudiante" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                               <Component id="jb_simular" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+                              <Component id="jb_vaciar" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="jb_agregarBus" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
@@ -526,6 +528,7 @@
                   <Component id="jb_agregarBus" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jb_agregarEst" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButton3" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jb_vaciar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="64" max="32767" attributes="0"/>
           </Group>
@@ -593,6 +596,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Empezar Simulacion"/>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jb_simularMouseClicked"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jb_agregarBus">
       <Properties>
@@ -616,6 +622,14 @@
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton3MouseClicked"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="jb_vaciar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Vaciar Bus"/>
+      </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jb_vaciarMouseClicked"/>
       </Events>
     </Component>
   </SubComponents>

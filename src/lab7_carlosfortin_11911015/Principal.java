@@ -72,9 +72,9 @@ public class Principal extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         sp_distancia = new javax.swing.JSpinner();
         jLabel14 = new javax.swing.JLabel();
-        tf_angulo = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
+        sp_angulo = new javax.swing.JSpinner();
         jd_simulacion = new javax.swing.JDialog();
         jLabel16 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -262,7 +262,7 @@ public class Principal extends javax.swing.JFrame {
 
         jLabel14.setText("Angulo");
 
-        jLabel15.setText("x π");
+        jLabel15.setText("radianes");
 
         jButton2.setText("Agregar Parada");
         jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -270,6 +270,8 @@ public class Principal extends javax.swing.JFrame {
                 jButton2MouseClicked(evt);
             }
         });
+
+        sp_angulo.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 0.1d));
 
         javax.swing.GroupLayout jd_agregarParadaLayout = new javax.swing.GroupLayout(jd_agregarParada.getContentPane());
         jd_agregarParada.getContentPane().setLayout(jd_agregarParadaLayout);
@@ -291,8 +293,8 @@ public class Principal extends javax.swing.JFrame {
                             .addComponent(tf_nomPar)
                             .addComponent(sp_distancia, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
                             .addGroup(jd_agregarParadaLayout.createSequentialGroup()
-                                .addComponent(tf_angulo, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(sp_angulo, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel15)))))
                 .addContainerGap(192, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jd_agregarParadaLayout.createSequentialGroup()
@@ -313,12 +315,12 @@ public class Principal extends javax.swing.JFrame {
                 .addGroup(jd_agregarParadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
                     .addComponent(sp_distancia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31)
+                .addGap(30, 30, 30)
                 .addGroup(jd_agregarParadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
-                    .addComponent(tf_angulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel15))
-                .addGap(68, 68, 68)
+                    .addComponent(jLabel15)
+                    .addComponent(sp_angulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(67, 67, 67)
                 .addComponent(jButton2)
                 .addContainerGap(86, Short.MAX_VALUE))
         );
@@ -347,16 +349,16 @@ public class Principal extends javax.swing.JFrame {
         jd_simulacion.getContentPane().setLayout(jd_simulacionLayout);
         jd_simulacionLayout.setHorizontalGroup(
             jd_simulacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jd_simulacionLayout.createSequentialGroup()
-                .addGap(389, 389, 389)
-                .addComponent(jLabel16)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jd_simulacionLayout.createSequentialGroup()
                 .addContainerGap(31, Short.MAX_VALUE)
                 .addGroup(jd_simulacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 775, Short.MAX_VALUE)
                     .addComponent(pb_tiempo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(31, 31, 31))
+            .addGroup(jd_simulacionLayout.createSequentialGroup()
+                .addGap(389, 389, 389)
+                .addComponent(jLabel16)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jd_simulacionLayout.setVerticalGroup(
             jd_simulacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -366,8 +368,8 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36)
-                .addComponent(pb_tiempo, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addComponent(pb_tiempo, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -603,10 +605,8 @@ public class Principal extends javax.swing.JFrame {
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
         String nombre=tf_nomPar.getText();
         int distancia=Integer.parseInt(sp_distancia.getValue().toString());
-        String[] tokens=tf_angulo.getText().split("/");
-        int num=Integer.parseInt(tokens[0]);
-        int den=Integer.parseInt(tokens[1]);
-        double angulo=((num*Math.PI)/den)*(180/Math.PI);
+        double rad=Double.parseDouble(sp_angulo.getValue().toString());
+        double angulo=(rad*(180/Math.PI));
         System.out.println(angulo);
         boolean x=true;
         for (Parada p : ap.getParadas()) {
@@ -626,7 +626,7 @@ public class Principal extends javax.swing.JFrame {
         }
         tf_nomPar.setText("");
         sp_distancia.setValue(0);
-        tf_angulo.setText("");
+        sp_angulo.setValue(0);
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void jb_subirEstudianteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_subirEstudianteMouseClicked
@@ -855,11 +855,11 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JDialog jd_agregarParada;
     private javax.swing.JDialog jd_simulacion;
     private javax.swing.JProgressBar pb_tiempo;
+    private javax.swing.JSpinner sp_angulo;
     private javax.swing.JSpinner sp_distancia;
     private javax.swing.JSpinner sp_edad;
     private javax.swing.JSpinner sp_numbus;
     private javax.swing.JSpinner sp_velocidad;
-    private javax.swing.JTextField tf_angulo;
     private javax.swing.JTextField tf_nomEst;
     private javax.swing.JTextField tf_nomPar;
     private javax.swing.JTextField tf_placa;

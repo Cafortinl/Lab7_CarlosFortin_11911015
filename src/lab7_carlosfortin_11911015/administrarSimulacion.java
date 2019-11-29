@@ -59,13 +59,16 @@ public class administrarSimulacion extends Thread{
     @Override
     public void run(){
         while(vive){
-            if(bus.getEstudiantes().isEmpty()){
+            if(bus.getEstudiantes().size()==0){
                 Parada unitec=new Parada();
                 unitec.setCx(0);
                 unitec.setCy(0);
                 distancia.setMaximum(calcularDistancia(unitec));
                 distancia.setString("Tiempo restante: "+calcularDistancia(unitec)/bus.getVelocidad()+" horas");
                 distancia.setValue(distancia.getValue()+(distancia.getValue()*calcularDistancia(unitec)/bus.getVelocidad()));
+                System.out.println(calcularDistancia(unitec));
+                System.out.println(unitec);
+                vive=false;
             }else{
                 int d=100000;
                 Parada cercana=null;
@@ -78,30 +81,36 @@ public class administrarSimulacion extends Thread{
                         t=p;
                     }
                 }
-                bus.getEstudiantes().remove(t);
-                System.out.println(cercana);
-                cxact=cercana.getCx();
-                cyact=cercana.getCy();
-                System.out.println(cercana.getCx()+" "+cercana.getCy()+" "+cxact+" "+cyact);
-                System.out.println(calcularDistancia(cercana));
+                
                 distancia.setMaximum(d);
                 distancia.setString("Tiempo restante: "+d/bus.getVelocidad()+" horas");
-                distancia.setValue(distancia.getValue()+(distancia.getValue()*d/bus.getVelocidad()));
+                distancia.setValue((int) Math.round(distancia.getValue()+(distancia.getValue()*d/bus.getVelocidad())));
+                if(distancia.getValue()==distancia.getMaximum())
+                    distancia.setValue(0);
+                
+                bus.getEstudiantes().remove(t);
+                //System.out.println(cercana+" "+calcularDistancia(cercana));
+                cxact=cercana.getCx();
+                cyact=cercana.getCy();
             }
             try {
-                    Thread.sleep(10000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException ex) {
                 }
         }
     }
     
     public int calcularDistancia(Parada p){
-        int distancia;
+        int dist;
         double px=p.getCx();
         double py=p.getCy();
-        distancia=(int) Math.round(Math.sqrt((Math.pow((px-cxact), 2))+(Math.pow((py-cyact), 2))));
-       // System.out.println(distancia);
-        return distancia;
+        dist=(int) Math.round(Math.sqrt((Math.pow((px-cxact), 2))+(Math.pow((py-cyact), 2))));
+        System.out.println(dist);
+        return dist;
+    }
+    
+    public void actualizarTabla(){
+        
     }
     
 }

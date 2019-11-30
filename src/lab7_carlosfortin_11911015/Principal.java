@@ -32,6 +32,8 @@ public class Principal extends javax.swing.JFrame {
         ae.leerArchivo();
         actualizarTablaEstudiantes();
         ap.leerArchivo();
+                
+        
     }
 
     /**
@@ -80,6 +82,7 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         Tabla_simulacion = new javax.swing.JTable();
         pb_tiempo = new javax.swing.JProgressBar();
+        jButton4 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla_buses = new javax.swing.JTable();
@@ -345,20 +348,32 @@ public class Principal extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(Tabla_simulacion);
 
+        jButton4.setText("Simular");
+        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton4MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jd_simulacionLayout = new javax.swing.GroupLayout(jd_simulacion.getContentPane());
         jd_simulacion.getContentPane().setLayout(jd_simulacionLayout);
         jd_simulacionLayout.setHorizontalGroup(
             jd_simulacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jd_simulacionLayout.createSequentialGroup()
-                .addContainerGap(31, Short.MAX_VALUE)
-                .addGroup(jd_simulacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 775, Short.MAX_VALUE)
-                    .addComponent(pb_tiempo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(31, 31, 31))
             .addGroup(jd_simulacionLayout.createSequentialGroup()
                 .addGap(389, 389, 389)
                 .addComponent(jLabel16)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jd_simulacionLayout.createSequentialGroup()
+                .addContainerGap(31, Short.MAX_VALUE)
+                .addGroup(jd_simulacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jd_simulacionLayout.createSequentialGroup()
+                        .addGroup(jd_simulacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 775, Short.MAX_VALUE)
+                            .addComponent(pb_tiempo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(31, 31, 31))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jd_simulacionLayout.createSequentialGroup()
+                        .addComponent(jButton4)
+                        .addGap(379, 379, 379))))
         );
         jd_simulacionLayout.setVerticalGroup(
             jd_simulacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -369,7 +384,9 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36)
                 .addComponent(pb_tiempo, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addGap(35, 35, 35)
+                .addComponent(jButton4)
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -661,12 +678,13 @@ public class Principal extends javax.swing.JFrame {
 
     private void jb_simularMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_simularMouseClicked
         if(Tabla_buses.getSelectedRow()>=0){
-            Autobus sim=null;
             String t=Tabla_buses.getValueAt(Tabla_buses.getSelectedRow(), 1).toString();
             for (Autobus buse : ab.getBuses()) {
                 if(buse.getPlaca().equals(t)){
                     sim=buse;
                     break;
+                }else{
+                    sim=null;
                 }
             }
             if(sim.getEstudiantes().isEmpty())
@@ -675,9 +693,11 @@ public class Principal extends javax.swing.JFrame {
                 jd_simulacion.setVisible(true);
                 jd_simulacion.pack();
                 jd_simulacion.setLocationRelativeTo(this);
-                as=new administrarSimulacion(pb_tiempo, sim, Tabla_simulacion);
-                as.start();
+                //as=new administrarSimulacion(pb_tiempo, sim, Tabla_simulacion);
+                System.out.println(sim);
             }
+            
+        
         }
     }//GEN-LAST:event_jb_simularMouseClicked
 
@@ -698,6 +718,11 @@ public class Principal extends javax.swing.JFrame {
     private void jb_colorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_colorMouseClicked
         jb_color.setBackground(JColorChooser.showDialog(jd_agregarBus, "Elija un color", Color.yellow));
     }//GEN-LAST:event_jb_colorMouseClicked
+
+    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
+        as=new administrarSimulacion(this.pb_tiempo, this.sim, this.Tabla_simulacion);
+        as.start();
+    }//GEN-LAST:event_jButton4MouseClicked
     
     
     public void actualizarTablaBuses(){
@@ -823,6 +848,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -868,4 +894,5 @@ public class Principal extends javax.swing.JFrame {
     administrarEstudiantes ae=new administrarEstudiantes("./estudiantes.cafl");
     administrarParadas ap=new administrarParadas("./paradas.cafl");
     administrarSimulacion as;
+    Autobus sim=null;
 }

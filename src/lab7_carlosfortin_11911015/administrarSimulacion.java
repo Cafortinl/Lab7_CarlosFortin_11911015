@@ -66,16 +66,17 @@ public class administrarSimulacion extends Thread{
                 Parada unitec=new Parada();
                 unitec.setCx(0);
                 unitec.setCy(0);
-                distancia.setMaximum(calcularDistancia(unitec));
-                distancia.setString("Tiempo restante: "+calcularDistancia(unitec)/bus.getVelocidad()+" horas");
-                distancia.setValue(distancia.getValue()+(distancia.getValue()*calcularDistancia(unitec)/bus.getVelocidad()));
+                this.distancia.setMaximum(calcularDistancia(unitec));
+                this.distancia.setString("Tiempo restante: "+calcularDistancia(unitec)/bus.getVelocidad()+" horas");
+                this.distancia.setValue(distancia.getValue()+(distancia.getValue()*calcularDistancia(unitec)/bus.getVelocidad()));
                 System.out.println(calcularDistancia(unitec));
                 System.out.println(unitec);
                 vive=false;
             }else{
-                int dmin=100000;
+                double dmin=100000;
                 Parada cercana=null;
                 Estudiante t=null;
+                
                 for (Estudiante p : bus.getEstudiantes()) {
                     Parada temp=p.getParada();
                     if(calcularDistancia(temp)<dmin){
@@ -84,24 +85,28 @@ public class administrarSimulacion extends Thread{
                         t=p;
                     }
                 }
-                int tiempo=dmin/bus.getVelocidad();
-                System.out.println(tiempo);
-                System.out.println(bus.getVelocidad());
-                String[] info={cercana.getNombre(),Integer.toString(tiempo)+"horas",t.getNombre()};
-                agregarATabla(info);
-                distancia.setMaximum(dmin);
-                distancia.setString("Tiempo restante: "+dmin/bus.getVelocidad()+" horas");
-                distancia.setValue((int) Math.round(distancia.getValue()+(distancia.getValue()*tiempo)));
-                if(distancia.getValue()==distancia.getMaximum())
-                    distancia.setValue(0);
                 
-                bus.getEstudiantes().remove(t);
+                double tiempo=((dmin/bus.getVelocidad()));
+                System.out.println("dmin:"+dmin);
+                System.out.println("tiempo: "+tiempo);
+                System.out.println(bus.getVelocidad());
+                this.distancia.setMaximum((int) cercana.getDistancia());
+                this.distancia.setString("Tiempo restante: "+dmin/bus.getVelocidad()+" horas");
+                this.distancia.setValue(distancia.getValue()+1);
+                System.out.println("c:"+distancia.getValue());
+                if(this.distancia.getValue()==distancia.getMaximum()){
+                        this.distancia.setValue(0);
+                        bus.getEstudiantes().remove(t);
+                }
+                
                 //System.out.println(cercana+" "+calcularDistancia(cercana));
                 cxact=cercana.getCx();
                 cyact=cercana.getCy();
+                String[] info={cercana.getNombre(),Double.toString(tiempo)+" horas",t.getNombre()};
+                agregarATabla(info);
             }
             try {
-                    Thread.sleep(1000);
+                    Thread.sleep(1100);
                 } catch (InterruptedException ex) {
                 }
         }
